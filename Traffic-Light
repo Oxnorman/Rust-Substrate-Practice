@@ -1,0 +1,51 @@
+package com.foresee.test;
+ 
+public class EnumTest {
+ 
+	
+	public static void main(String[] args) {
+ 
+		try{
+			  while(true){
+				System.out.println("当前灯："+TrafficLamp.GREEN);
+				Thread.currentThread().sleep(TrafficLamp.GREEN.getTime());
+				System.out.println("当前灯："+TrafficLamp.GREEN.nextLamp());
+				Thread.currentThread().sleep(TrafficLamp.GREEN.nextLamp().getTime());
+				System.out.println("当前灯："+TrafficLamp.GREEN.nextLamp().nextLamp());
+				Thread.currentThread().sleep(TrafficLamp.GREEN.nextLamp().nextLamp().getTime());
+			  }
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+ 
+ 
+	public enum TrafficLamp {
+		GREEN(5000){
+			public TrafficLamp nextLamp(){
+				return YELLOW;
+			}
+		}, YELLOW(2000){
+			public TrafficLamp nextLamp(){
+				return RED;
+			}
+		}, RED(5000){
+			public TrafficLamp nextLamp(){
+				return GREEN;
+			}
+		};
+		//获取下一个灯，在枚举元素中实现
+		public abstract TrafficLamp nextLamp();
+		//灯亮的时间
+		private long time;
+ 
+		private TrafficLamp(long time) {
+			this.time = time;
+		}
+		
+		public long getTime(){
+			return this.time;
+		}
+	}
+ 
+}

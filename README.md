@@ -1,5 +1,7 @@
 # Rust-Substrate-Practice
-From one block+ - Wechat
+From
+
+one block+ - Wechat
  
 Rust for beginner - youtube
 

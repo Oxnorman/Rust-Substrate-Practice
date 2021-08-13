@@ -1,0 +1,17 @@
+#[pallet::weight(10_000)]
+		pub fn transfer_claim(origin: OriginFor<T>, claim: Vec<u8>, dest: T::AccountId) -> DispatchResultWithPostInfo {
+			let sender = ensure_signed(origin)?;
+
+			ensure!(Proofs::<T>::contains_key(&claim), Error::<T>::NoSuchProof);
+
+			let (owner, _block_number) = Proofs::<T>::get(&claim);
+
+			ensure!(owner == sender, Error::<T>::NotProofOwner);
+
+			Proofs::<T>::insert(&claim, (dest.clone(), frame_system::Pallet::<T>::block_number()));
+
+			Self::deposit_event(Event::TransferClaim(sender, claim, dest));
+
+			Ok(().into())
+		}
+    

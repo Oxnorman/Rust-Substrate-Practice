@@ -1,0 +1,28 @@
+#[pallet:event]
+#[pallet::generate_deposit(pub(super) fn deposit_event)]
+pub enum Event<T:Config>{
+    ClaimCreate(T::AccountId,Vec<u8>),
+}
+
+
+
+#[pallet::call]
+impl<T:Config> Pallet<T>{
+    #[pallet::weight(0)]
+    pub fn create_claim(
+        origin:OriginFor<T>,
+        claim:Vec<u8>
+    )->DispatchResultWithPostInfo{
+       let sender = ensure_signed(origin)?;
+       ensure!(Proofs::<T>::contains_key(&claim),Error::<T>::ProofAlreadyExist);
+       
+       Proofs::<T>::insert(
+       &claim,(sender.clone(),frame_system::Pallet::<T>::block_number()));
+       );
+       
+       Self::deposit_event(Event::ClaimCreated(sender,claim));
+       Ok(().into())
+       
+    }
+  }
+}
